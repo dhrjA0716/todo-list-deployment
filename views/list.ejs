@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Tool list </title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+
+<body>
+    <div class="box">
+        <h1>Todo list</h1>
+    </div>
+    <div class="box">
+        <% dayej.forEach(function(Items){ %>
+            <form action="/delete" method="POST">
+                <div class="item">
+                    <input type="checkbox" id="checkbox1" name="checkbox1" value="<%= Items._id %>"
+                        onchange="this.form.submit()">
+                    <p>
+                        <%= Items.name %>
+                    </p>
+                </div>
+            </form>
+
+            <% }) %>
+
+                <form action="/" method="POST" onsubmit="return validateForm()">
+                    <input type="text" name="ele1" id="ele1">
+                    <button type="submit">+</button>
+                </form>
+
+
+    </div>
+    <script>
+        function validateForm() {
+            const input = document.getElementById("ele1").value.trim();
+            if (input === "") {
+                alert("Field is empty. Please enter a task!");
+                return false; // Prevent form submission
+            }
+            return true; // Allow form submission
+        }
+    </script>
+</body>
+
+</html>
