@@ -1,31 +1,43 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 var app = express();
+
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/todo');
-const trySchema = new mongoose.Schema({
-    name: String,
+// Use array instead of MongoDB
+let todos = [
+    { id: 1, name: "Create a video" },
+    { id: 2, name: "Learn DSA" },
+    { id: 3, name: "Learn React" },
+    { id: 4, name: "Take some rest" }
+];
+let nextId = 5;
+
+// Routes
+app.get("/", function (req, res) {
+    res.render("list", { dayej: todos });
 });
-const Item = mongoose.model('task', trySchema);
-const todo = new Item({
-    name: "Create a video"
+
+app.post("/", function (req, res) {
+    const itemName = req.body.ele1;
+    if (itemName && itemName.trim() !== "") {
+        todos.push({ id: nextId++, name: itemName });
+    }
+    res.redirect("/");
 });
-const todo2 = new Item({
-    name: "Learn DSA"
+
+app.post("/delete", function (req, res) {
+    const checked = parseInt(req.body.checkbox1);
+    todos = todos.filter(item => item.id !== checked);
+    res.redirect("/");
 });
-const todo3 = new Item({
-    name: "Learn React"
+
+app.listen(3000, function () {
+    console.log("Server is running");
 });
-const todo4 = new Item({
-    name: "Take some rest"
-});
-// todo2.save();
-// todo3.save();
-// todo4.save();0
+
 
 
 app.get("/", async function (req, res) {
