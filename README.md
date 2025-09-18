@@ -3,13 +3,13 @@
 ## 🚀 Project Objective
 A dynamic Todo List web app built with Express.js and EJS that allows users to add, edit, delete, and filter tasks.
 
-## 🔗 Live Deployment
+ Live Deployment
 [View Live App](https://todo-list-deployment-6.onrender.com)
 
-## 📂 GitHub Repository
+ GitHub Repository
 [GitHub Repo](https://github.com/dhrjA0716/todo-list-deployment)
 
-## 🛠 Features
+ Features
 - Add, edit, delete todos
 - Filter by priority
 - Responsive UI
