@@ -1,17 +1,8 @@
-# Todo List Web App (EJS + Express)
+Todo List Web App
 
-## 🚀 Project Objective
-A dynamic Todo List web app built with Express.js and EJS that allows users to add, edit, delete, and filter tasks.
+I built a Todo List web app using EJS, Express, and MongoDB.
+It lets you add, edit, delete, and filter tasks easily. The design is simple, responsive, and shows alerts if you try to add an empty task.
 
- Live Deployment
-[View Live App](https://todo-list-deployment-6.onrender.com)
+🔗 Live App: todo-list-deployment-6.onrender.com
 
- GitHub Repository
-[GitHub Repo](https://github.com/dhrjA0716/todo-list-deployment)
-
- Features
-- Add, edit, delete todos
-- Filter by priority
-- Responsive UI
-- Alerts for empty input
-- EJS templating with Express.js
+📂 GitHub Repo: github.com/dhrjA0716/todo-list-deployment
