@@ -1,42 +1,27 @@
- const express = require('express');
-const bodyParser = require('body-parser');
+const express = require('express');
 const mongoose = require('mongoose');
 
 const app = express();
 
-const uri = process.env.MONGO_URI;  
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.error("MongoDB connection error:", err));
+const uri = process.env.MONGO_URI;
 
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log(" MongoDB connected"))
+  .catch(err => console.error(" MongoDB connection error:", err));
 
 // Middleware & View Engine
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-
-// Database connection
-mongoose.connect('mongodb://localhost:27017/todo');
-
 // Mongoose schema & model
 const trySchema = new mongoose.Schema({
   name: String,
 });
-
 const Item = mongoose.model('task', trySchema);
 
-// Sample items (not saved by default)
-// const todo = new Item({ name: "Create a video" });
-// const todo2 = new Item({ name: "Learn DSA" });
-// const todo3 = new Item({ name: "Learn React" });
-// const todo4 = new Item({ name: "Take some rest" });
-// todo2.save(); todo3.save(); todo4.save();
-
 // Routes
-
-// GET /
-app.get("/", async function (req, res) {
+app.get("/", async (req, res) => {
   try {
     const foundItems = await Item.find({});
     res.render("list", { dayej: foundItems });
@@ -46,11 +31,9 @@ app.get("/", async function (req, res) {
   }
 });
 
-// POST /
-app.post("/", async function (req, res) {
+app.post("/", async (req, res) => {
   const ItemName = req.body.ele1;
   const newItem = new Item({ name: ItemName });
-
   try {
     await newItem.save();
     res.redirect("/");
@@ -60,32 +43,20 @@ app.post("/", async function (req, res) {
   }
 });
 
-// POST /delete
-app.post("/delete", async function (req, res) {
+app.post("/delete", async (req, res) => {
   const checked = req.body.checkbox1;
-  console.log("Checkbox value:", checked);
-
   if (!mongoose.Types.ObjectId.isValid(checked)) {
-    console.log("Invalid ObjectId:", checked);
     return res.status(400).send("Invalid ID");
   }
 
   try {
-    const result = await Item.findByIdAndDelete(checked);
-
-    if (result) {
-      console.log("Deleted successfully");
-      res.redirect("/");
-    } else {
-      console.log("Item not found");
-      res.status(404).send("Item not found");
-    }
+    await Item.findByIdAndDelete(checked);
+    res.redirect("/");
   } catch (err) {
     console.error("Failed to delete:", err);
     res.status(500).send("Failed to delete the record.");
   }
 });
-
 // Start server
 app.listen(3000, function () {
   console.log("Server is running");
