@@ -1,39 +1,84 @@
-const express = require('express');
+ const express = require('express');
 const bodyParser = require('body-parser');
-var app = express();
+const mongoose = require('mongoose');
+
+const app = express();
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-// Use array instead of MongoDB
-let todos = [
-    { id: 1, name: "Create a video" },
-    { id: 2, name: "Learn DSA" },
-    { id: 3, name: "Learn React" },
-    { id: 4, name: "Take some rest" }
-];
-let nextId = 5;
+// Database connection
+mongoose.connect('mongodb://localhost:27017/todo');
 
-// Routes
-app.get("/", function (req, res) {
-    res.render("list", { dayej: todos });
+// Mongoose schema & model
+const trySchema = new mongoose.Schema({
+  name: String,
 });
 
-app.post("/", function (req, res) {
-    const itemName = req.body.ele1;
-    if (itemName && itemName.trim() !== "") {
-        todos.push({ id: nextId++, name: itemName });
+const Item = mongoose.model('task', trySchema);
+
+// Sample items (not saved by default)
+// const todo = new Item({ name: "Create a video" });
+// const todo2 = new Item({ name: "Learn DSA" });
+// const todo3 = new Item({ name: "Learn React" });
+// const todo4 = new Item({ name: "Take some rest" });
+// todo2.save(); todo3.save(); todo4.save();
+
+
+// GET /
+app.get("/", async function (req, res) {
+  try {
+    const foundItems = await Item.find({});
+    res.render("list", { dayej: foundItems });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Something went wrong.");
+  }
+});
+
+// POST /
+app.post("/", async function (req, res) {
+  const ItemName = req.body.ele1;
+  const newItem = new Item({ name: ItemName });
+
+  try {
+    await newItem.save();
+    res.redirect("/");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Failed to save the item.");
+  }
+});
+
+// POST /delete
+app.post("/delete", async function (req, res) {
+  const checked = req.body.checkbox1;
+  console.log("Checkbox value:", checked);
+
+  if (!mongoose.Types.ObjectId.isValid(checked)) {
+    console.log("Invalid ObjectId:", checked);
+    return res.status(400).send("Invalid ID");
+  }
+
+  try {
+    const result = await Item.findByIdAndDelete(checked);
+
+    if (result) {
+      console.log("Deleted successfully");
+      res.redirect("/");
+    } else {
+      console.log("Item not found");
+      res.status(404).send("Item not found");
     }
-    res.redirect("/");
+  } catch (err) {
+    console.error("Failed to delete:", err);
+    res.status(500).send("Failed to delete the record.");
+  }
 });
 
-app.post("/delete", function (req, res) {
-    const checked = parseInt(req.body.checkbox1);
-    todos = todos.filter(item => item.id !== checked);
-    res.redirect("/");
-});
-
+// Start serve
 app.listen(3000, function () {
-    console.log("Server is running");
+  console.log("Server is running");
 });
+
