@@ -4,9 +4,15 @@ const mongoose = require('mongoose');
 
 const app = express();
 
+const DB_URL = process.env.atlas_URL;
+mongoose.connect(DB_URL);
+const conn = mongoose.connection;
+
+// Middleware & View Engine
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
 
 // Database connection
 mongoose.connect('mongodb://localhost:27017/todo');
@@ -25,6 +31,7 @@ const Item = mongoose.model('task', trySchema);
 // const todo4 = new Item({ name: "Take some rest" });
 // todo2.save(); todo3.save(); todo4.save();
 
+// Routes
 
 // GET /
 app.get("/", async function (req, res) {
@@ -77,7 +84,7 @@ app.post("/delete", async function (req, res) {
   }
 });
 
-// Start serve
+// Start server
 app.listen(3000, function () {
   console.log("Server is running");
 });
