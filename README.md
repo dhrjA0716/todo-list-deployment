@@ -5,4 +5,4 @@ It lets you add, edit, delete, and filter tasks easily. The design is simple, re
 
 🔗 Live App: (https://todo-list-deployment-5.onrender.com)
 
-📂 GitHub Repo: github.com/dhrjA0716/todo-list-deployment
+📂 GitHub Repo: (https://github.com/dhrjA0716/todo-list-deployment/edit/main/README.md)
