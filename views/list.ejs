@@ -1,45 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title> Tool list </title>
+    <meta charset="UTF-8">
+    <title>Todo List</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
-
 <body>
     <div class="box">
-        <h1>Todo list</h1>
+        <h1>My Todo List</h1>
     </div>
+
     <div class="box">
-        <% dayej.forEach(function(Items){ %>
-            <form action="/delete" method="POST">
+        <!-- Existing tasks -->
+        <% dayej.forEach(function(task) { %>
+            <form action="/delete" method="POST" class="task-form">
                 <div class="item">
-                    <input type="checkbox" id="checkbox1" name="checkbox1" value="<%= Items._id %>"
-                        onchange="this.form.submit()">
-                    <p>
-                        <%= Items.name %>
-                    </p>
+                    <input type="checkbox" 
+                           name="checkbox1" 
+                           value="<%= task._id %>" 
+                           onchange="this.form.submit()">
+                    <p><%= task.name %></p>
                 </div>
             </form>
+        <% }) %>
 
-            <% }) %>
-
-                <form action="/" method="POST" onsubmit="return validateForm()">
-                    <input type="text" name="ele1" id="ele1">
-                    <button type="submit">+</button>
-                </form>
-
-
+        <!-- Add new task -->
+        <form action="/" method="POST" onsubmit="return validateForm()" class="add-form">
+            <input type="text" name="ele1" id="ele1" placeholder="Enter a new task...">
+            <button type="submit">+</button>
+        </form>
     </div>
+
     <script>
         function validateForm() {
-            const input = document.getElementById("ele1").value.trim();
-            if (input === "") {
-                alert("Field is empty. Please enter a task!");
-                return false; // Prevent form submission
+            const value = document.getElementById("ele1").value.trim();
+            if (!value) {
+                alert("Please enter a task before submitting!");
+                return false;
             }
-            return true; // Allow form submission
+            return true;
         }
     </script>
 </body>
