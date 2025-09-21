@@ -4,9 +4,13 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-const DB_URL = process.env.atlas_URL;
-mongoose.connect(DB_URL);
-const conn = mongoose.connection;
+const mongoose = require("mongoose");
+
+const uri = process.env.MONGO_URI;  /
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.error("MongoDB connection error:", err));
+
 
 // Middleware & View Engine
 app.set("view engine", "ejs");
