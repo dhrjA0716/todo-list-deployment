@@ -2,10 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 require("dotenv").config();
 
-
 const app = express();
-
-const uri = process.env.MONGO_URI;
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
@@ -15,11 +12,6 @@ mongoose.connect(process.env.MONGO_URI)
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
-
-const port = process.env.PORT 3000;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
 
 // Mongoose schema & model
 const trySchema = new mongoose.Schema({
@@ -64,8 +56,9 @@ app.post("/delete", async (req, res) => {
     res.status(500).send("Failed to delete the record.");
   }
 });
-// Start server
-app.listen(3000, function () {
-  console.log("Server is running");
-});
 
+// Start server
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
