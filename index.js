@@ -20,6 +20,8 @@ const trySchema = new mongoose.Schema({
 const Item = mongoose.model('task', trySchema);
 
 // Routes
+
+// Display Items - 
 app.get("/", async (req, res) => {
   try {
     const foundItems = await Item.find({});
@@ -29,6 +31,8 @@ app.get("/", async (req, res) => {
     res.status(500).send("Something went wrong.");
   }
 });
+
+
 
 app.post("/", async (req, res) => {
   const ItemName = req.body.ele1;
@@ -42,6 +46,8 @@ app.post("/", async (req, res) => {
   }
 });
 
+// Add Items
+
 app.post("/delete", async (req, res) => {
   const checked = req.body.checkbox1;
   if (!mongoose.Types.ObjectId.isValid(checked)) {
@@ -50,6 +56,42 @@ app.post("/delete", async (req, res) => {
 
   try {
     await Item.findByIdAndDelete(checked);
+    res.redirect("/");
+  } catch (err) {
+    console.error("Failed to delete:", err);
+    res.status(500).send("Failed to delete the record.");
+  }
+});
+
+// Update Item -
+app.put("/", async (req, res) => {
+  const id = req.body.id;
+  const updatedName = req.body.ele1;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID");
+  }
+
+  try {
+    await Item.findByIdAndUpdate(id, { name: updatedName });
+    res.redirect("/");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Failed to update the item.");
+  }
+});
+
+// Delete Item -
+
+app.delete("/", async (req, res) => {
+  const id = req.body.id;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).send("Invalid ID");
+  }
+
+  try {
+    await Item.findByIdAndDelete(id);
     res.redirect("/");
   } catch (err) {
     console.error("Failed to delete:", err);
